@@ -1,0 +1,298 @@
+[
+  {
+    "id": "column.public.student.birthday",
+    "label": "Add column \"birthday\" to \"student\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "column",
+        "name": "birthday",
+        "table": "student"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure column \"birthday\" is missing",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"information_schema\".\"columns\" WHERE (\"table_schema\" = $1 AND \"table_name\" = $2 AND \"column_name\" = $3)) AS \"result\"",
+        "params": [
+          "public",
+          "student",
+          "birthday"
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add column \"birthday\"",
+        "sql": "ALTER TABLE \"public\".\"student\" ADD COLUMN \"birthday\" timestamptz"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify column \"birthday\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"information_schema\".\"columns\" WHERE (\"table_schema\" = $1 AND \"table_name\" = $2 AND \"column_name\" = $3)) AS \"result\"",
+        "params": [
+          "public",
+          "student",
+          "birthday"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "column.public.teacher.birthday",
+    "label": "Add column \"birthday\" to \"teacher\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "column",
+        "name": "birthday",
+        "table": "teacher"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure column \"birthday\" is missing",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"information_schema\".\"columns\" WHERE (\"table_schema\" = $1 AND \"table_name\" = $2 AND \"column_name\" = $3)) AS \"result\"",
+        "params": [
+          "public",
+          "teacher",
+          "birthday"
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add column \"birthday\"",
+        "sql": "ALTER TABLE \"public\".\"teacher\" ADD COLUMN \"birthday\" timestamptz"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify column \"birthday\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"information_schema\".\"columns\" WHERE (\"table_schema\" = $1 AND \"table_name\" = $2 AND \"column_name\" = $3)) AS \"result\"",
+        "params": [
+          "public",
+          "teacher",
+          "birthday"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "column.public.teacher.bloodType",
+    "label": "Add column \"bloodType\" to \"teacher\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "column",
+        "name": "bloodType",
+        "table": "teacher"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure column \"bloodType\" is missing",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"information_schema\".\"columns\" WHERE (\"table_schema\" = $1 AND \"table_name\" = $2 AND \"column_name\" = $3)) AS \"result\"",
+        "params": [
+          "public",
+          "teacher",
+          "bloodType"
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add column \"bloodType\"",
+        "sql": "ALTER TABLE \"public\".\"teacher\" ADD COLUMN \"bloodType\" text"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify column \"bloodType\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"information_schema\".\"columns\" WHERE (\"table_schema\" = $1 AND \"table_name\" = $2 AND \"column_name\" = $3)) AS \"result\"",
+        "params": [
+          "public",
+          "teacher",
+          "bloodType"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "column.public.teacher.sex",
+    "label": "Add column \"sex\" to \"teacher\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "column",
+        "name": "sex",
+        "table": "teacher"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure column \"sex\" is missing",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"information_schema\".\"columns\" WHERE (\"table_schema\" = $1 AND \"table_name\" = $2 AND \"column_name\" = $3)) AS \"result\"",
+        "params": [
+          "public",
+          "teacher",
+          "sex"
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add column \"sex\"",
+        "sql": "ALTER TABLE \"public\".\"teacher\" ADD COLUMN \"sex\" text"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify column \"sex\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"information_schema\".\"columns\" WHERE (\"table_schema\" = $1 AND \"table_name\" = $2 AND \"column_name\" = $3)) AS \"result\"",
+        "params": [
+          "public",
+          "teacher",
+          "sex"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "alterNullability.dropNotNull.student.bloodType",
+    "label": "Drop NOT NULL on \"student\".\"bloodType\"",
+    "operationClass": "widening",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "column",
+        "name": "bloodType",
+        "table": "student"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure column \"bloodType\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"information_schema\".\"columns\" WHERE (\"table_schema\" = $1 AND \"table_name\" = $2 AND \"column_name\" = $3)) AS \"result\"",
+        "params": [
+          "public",
+          "student",
+          "bloodType"
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "drop NOT NULL on \"bloodType\"",
+        "sql": "ALTER TABLE \"public\".\"student\" ALTER COLUMN \"bloodType\" DROP NOT NULL"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify column \"bloodType\" is nullable",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"information_schema\".\"columns\" WHERE (\"table_schema\" = $1 AND \"table_name\" = $2 AND \"column_name\" = $3 AND \"is_nullable\" = $4)) AS \"result\"",
+        "params": [
+          "public",
+          "student",
+          "bloodType",
+          "YES"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "alterNullability.dropNotNull.student.sex",
+    "label": "Drop NOT NULL on \"student\".\"sex\"",
+    "operationClass": "widening",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "column",
+        "name": "sex",
+        "table": "student"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure column \"sex\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"information_schema\".\"columns\" WHERE (\"table_schema\" = $1 AND \"table_name\" = $2 AND \"column_name\" = $3)) AS \"result\"",
+        "params": [
+          "public",
+          "student",
+          "sex"
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "drop NOT NULL on \"sex\"",
+        "sql": "ALTER TABLE \"public\".\"student\" ALTER COLUMN \"sex\" DROP NOT NULL"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify column \"sex\" is nullable",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"information_schema\".\"columns\" WHERE (\"table_schema\" = $1 AND \"table_name\" = $2 AND \"column_name\" = $3 AND \"is_nullable\" = $4)) AS \"result\"",
+        "params": [
+          "public",
+          "student",
+          "sex",
+          "YES"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "checkConstraint.teacher.teacher_sex_check_0c53a478",
+    "label": "Add check constraint \"teacher_sex_check_0c53a478\" on \"teacher\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "checkConstraint",
+        "name": "teacher_sex_check_0c53a478",
+        "table": "teacher"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure constraint \"teacher_sex_check_0c53a478\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "teacher_sex_check_0c53a478",
+          "public",
+          "\"public\".\"teacher\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add check constraint \"teacher_sex_check_0c53a478\"",
+        "sql": "ALTER TABLE \"public\".\"teacher\" ADD CONSTRAINT \"teacher_sex_check_0c53a478\" CHECK (\"sex\" IN ('MALE', 'FEMALE'))"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify constraint \"teacher_sex_check_0c53a478\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "teacher_sex_check_0c53a478",
+          "public",
+          "\"public\".\"teacher\""
+        ]
+      }
+    ]
+  }
+]

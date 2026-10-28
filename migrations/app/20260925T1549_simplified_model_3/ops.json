@@ -1,0 +1,404 @@
+[
+  {
+    "id": "table.studentSubject",
+    "label": "Create table \"studentSubject\"",
+    "summary": "Creates table \"studentSubject\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "table",
+        "name": "studentSubject"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure table \"studentSubject\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"studentSubject\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create table \"studentSubject\"",
+        "sql": "CREATE TABLE \"public\".\"studentSubject\" (\n  \"studentId\" text NOT NULL,\n  \"subjectId\" int4 NOT NULL,\n  PRIMARY KEY (\"studentId\", \"subjectId\")\n)",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify table \"studentSubject\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"studentSubject\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "table.teacherSubject",
+    "label": "Create table \"teacherSubject\"",
+    "summary": "Creates table \"teacherSubject\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "table",
+        "name": "teacherSubject"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure table \"teacherSubject\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"teacherSubject\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create table \"teacherSubject\"",
+        "sql": "CREATE TABLE \"public\".\"teacherSubject\" (\n  \"subjectId\" int4 NOT NULL,\n  \"teacherId\" text NOT NULL,\n  PRIMARY KEY (\"teacherId\", \"subjectId\")\n)",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify table \"teacherSubject\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"teacherSubject\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "index.studentSubject.studentSubject_studentId_idx_bf255322",
+    "label": "Create index \"studentSubject_studentId_idx_bf255322\" on \"studentSubject\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "studentSubject_studentId_idx_bf255322",
+        "table": "studentSubject"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"studentSubject_studentId_idx_bf255322\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"studentSubject_studentId_idx_bf255322\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"studentSubject_studentId_idx_bf255322\"",
+        "sql": "CREATE INDEX \"studentSubject_studentId_idx_bf255322\" ON \"public\".\"studentSubject\" (\"studentId\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"studentSubject_studentId_idx_bf255322\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"studentSubject_studentId_idx_bf255322\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "index.studentSubject.studentSubject_subjectId_idx_84df2a1d",
+    "label": "Create index \"studentSubject_subjectId_idx_84df2a1d\" on \"studentSubject\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "studentSubject_subjectId_idx_84df2a1d",
+        "table": "studentSubject"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"studentSubject_subjectId_idx_84df2a1d\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"studentSubject_subjectId_idx_84df2a1d\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"studentSubject_subjectId_idx_84df2a1d\"",
+        "sql": "CREATE INDEX \"studentSubject_subjectId_idx_84df2a1d\" ON \"public\".\"studentSubject\" (\"subjectId\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"studentSubject_subjectId_idx_84df2a1d\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"studentSubject_subjectId_idx_84df2a1d\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "index.teacherSubject.teacherSubject_subjectId_idx_84df2a1d",
+    "label": "Create index \"teacherSubject_subjectId_idx_84df2a1d\" on \"teacherSubject\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "teacherSubject_subjectId_idx_84df2a1d",
+        "table": "teacherSubject"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"teacherSubject_subjectId_idx_84df2a1d\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"teacherSubject_subjectId_idx_84df2a1d\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"teacherSubject_subjectId_idx_84df2a1d\"",
+        "sql": "CREATE INDEX \"teacherSubject_subjectId_idx_84df2a1d\" ON \"public\".\"teacherSubject\" (\"subjectId\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"teacherSubject_subjectId_idx_84df2a1d\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"teacherSubject_subjectId_idx_84df2a1d\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "index.teacherSubject.teacherSubject_teacherId_idx_bc266660",
+    "label": "Create index \"teacherSubject_teacherId_idx_bc266660\" on \"teacherSubject\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "teacherSubject_teacherId_idx_bc266660",
+        "table": "teacherSubject"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"teacherSubject_teacherId_idx_bc266660\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"teacherSubject_teacherId_idx_bc266660\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"teacherSubject_teacherId_idx_bc266660\"",
+        "sql": "CREATE INDEX \"teacherSubject_teacherId_idx_bc266660\" ON \"public\".\"teacherSubject\" (\"teacherId\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"teacherSubject_teacherId_idx_bc266660\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"teacherSubject_teacherId_idx_bc266660\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "foreignKey.studentSubject.studentSubject_studentId_fkey",
+    "label": "Add foreign key \"studentSubject_studentId_fkey\" on \"studentSubject\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "foreignKey",
+        "name": "studentSubject_studentId_fkey",
+        "table": "studentSubject"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure FK \"studentSubject_studentId_fkey\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "studentSubject_studentId_fkey",
+          "public",
+          "\"public\".\"studentSubject\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add FK \"studentSubject_studentId_fkey\"",
+        "sql": "ALTER TABLE \"public\".\"studentSubject\"\nADD CONSTRAINT \"studentSubject_studentId_fkey\"\nFOREIGN KEY (\"studentId\")\nREFERENCES \"public\".\"student\" (\"id\")"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify FK \"studentSubject_studentId_fkey\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "studentSubject_studentId_fkey",
+          "public",
+          "\"public\".\"studentSubject\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "foreignKey.studentSubject.studentSubject_subjectId_fkey",
+    "label": "Add foreign key \"studentSubject_subjectId_fkey\" on \"studentSubject\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "foreignKey",
+        "name": "studentSubject_subjectId_fkey",
+        "table": "studentSubject"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure FK \"studentSubject_subjectId_fkey\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "studentSubject_subjectId_fkey",
+          "public",
+          "\"public\".\"studentSubject\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add FK \"studentSubject_subjectId_fkey\"",
+        "sql": "ALTER TABLE \"public\".\"studentSubject\"\nADD CONSTRAINT \"studentSubject_subjectId_fkey\"\nFOREIGN KEY (\"subjectId\")\nREFERENCES \"public\".\"subject\" (\"id\")"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify FK \"studentSubject_subjectId_fkey\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "studentSubject_subjectId_fkey",
+          "public",
+          "\"public\".\"studentSubject\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "foreignKey.teacherSubject.teacherSubject_teacherId_fkey",
+    "label": "Add foreign key \"teacherSubject_teacherId_fkey\" on \"teacherSubject\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "foreignKey",
+        "name": "teacherSubject_teacherId_fkey",
+        "table": "teacherSubject"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure FK \"teacherSubject_teacherId_fkey\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "teacherSubject_teacherId_fkey",
+          "public",
+          "\"public\".\"teacherSubject\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add FK \"teacherSubject_teacherId_fkey\"",
+        "sql": "ALTER TABLE \"public\".\"teacherSubject\"\nADD CONSTRAINT \"teacherSubject_teacherId_fkey\"\nFOREIGN KEY (\"teacherId\")\nREFERENCES \"public\".\"teacher\" (\"id\")"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify FK \"teacherSubject_teacherId_fkey\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "teacherSubject_teacherId_fkey",
+          "public",
+          "\"public\".\"teacherSubject\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "foreignKey.teacherSubject.teacherSubject_subjectId_fkey",
+    "label": "Add foreign key \"teacherSubject_subjectId_fkey\" on \"teacherSubject\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "foreignKey",
+        "name": "teacherSubject_subjectId_fkey",
+        "table": "teacherSubject"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure FK \"teacherSubject_subjectId_fkey\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "teacherSubject_subjectId_fkey",
+          "public",
+          "\"public\".\"teacherSubject\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add FK \"teacherSubject_subjectId_fkey\"",
+        "sql": "ALTER TABLE \"public\".\"teacherSubject\"\nADD CONSTRAINT \"teacherSubject_subjectId_fkey\"\nFOREIGN KEY (\"subjectId\")\nREFERENCES \"public\".\"subject\" (\"id\")"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify FK \"teacherSubject_subjectId_fkey\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "teacherSubject_subjectId_fkey",
+          "public",
+          "\"public\".\"teacherSubject\""
+        ]
+      }
+    ]
+  }
+]

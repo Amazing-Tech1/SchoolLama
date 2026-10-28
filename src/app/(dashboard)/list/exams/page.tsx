@@ -1,19 +1,17 @@
-import FormModal from "@/components/FormModal";
 import Pagination from "@/components/Pagination";
 import Table from "@/components/Table";
 import TableSearch from "@/components/TableSearch";
-import { examsData, role } from "@/lib/data";
+import { ITEM_PER_PAGE } from "@/lib/settings";
+import { db } from "@/lib/db";
+import { or } from "@prisma/orm-postgres/orm-client";
+
 import Image from "next/image";
+import { Models } from "@/prisma/contract";
+import { getCurrentAuth } from "@/lib/utils";
+import FormContainer from "@/components/FormContainer";
+import { serialize } from "@/lib/serialize";
 
-type Exam = {
-  id: number;
-  subject: string;
-  class: string;
-  teacher: string;
-  date: string;
-};
-
-const columns = [
+const getColumns = (role?: string) => [
   {
     header: "Subject Name",
     accessor: "name",
@@ -32,28 +30,192 @@ const columns = [
     accessor: "date",
     className: "hidden md:table-cell",
   },
-  {
-    header: "Actions",
-    accessor: "action",
-  },
+  ...(role === "admin" || role === "teacher"
+    ? [
+        {
+          header: "Actions",
+          accessor: "action",
+        },
+      ]
+    : []),
 ];
 
-const ExamListPage = () => {
-  const renderRow = (item: Exam) => (
+const ExamListPage = async ({
+  searchParams,
+}: {
+  searchParams: Promise<{ [key: string]: string | undefined }>;
+}) => {
+  const { currentUserId, role } = await getCurrentAuth();
+  const { page, ...queryParams } = await searchParams;
+
+  const p = page ? parseInt(page) : 1;
+
+  let lessonQuery = db.orm.public.Exams;
+  let lessonCountQuery = db.orm.public.Exams;
+
+  // =========================
+  // FILTERS
+  // =========================
+
+  for (const [key, value] of Object.entries(queryParams)) {
+    if (!value) continue;
+
+    switch (key) {
+      case "classId": {
+        const classId = parseInt(value, 10);
+
+        lessonQuery = lessonQuery.where((exam) =>
+          exam.lesson.some((lesson) => lesson.classId.eq(classId)),
+        );
+
+        lessonCountQuery = lessonCountQuery.where((exam) =>
+          exam.lesson.some((lesson) => lesson.classId.eq(classId)),
+        );
+
+        break;
+      }
+      case "teacherId": {
+        const teacherId = value;
+
+        lessonQuery = lessonQuery.where((exam) =>
+          exam.lesson.some((lesson) => lesson.teacherId.eq(teacherId)),
+        );
+
+        lessonCountQuery = lessonCountQuery.where((exam) =>
+          exam.lesson.some((lesson) => lesson.teacherId.eq(teacherId)),
+        );
+
+        break;
+      }
+
+      case "search": {
+        lessonQuery = lessonQuery.where((exam) =>
+          or(
+            exam.title.ilike(`%${value}%`),
+            exam.lesson.some((lesson) =>
+              or(
+                lesson.name.ilike(`%${value}%`),
+                lesson.subject.some((subject) => subject.name.ilike(`%${value}%`)),
+                lesson.teacher.some((teacher) => teacher.name.ilike(`%${value}%`)),
+              ),
+            ),
+          ),
+        );
+
+        lessonCountQuery = lessonCountQuery.where((exam) =>
+          or(
+            exam.title.ilike(`%${value}%`),
+            exam.lesson.some((lesson) =>
+              or(
+                lesson.name.ilike(`%${value}%`),
+                lesson.subject.some((subject) => subject.name.ilike(`%${value}%`)),
+                lesson.teacher.some((teacher) => teacher.name.ilike(`%${value}%`)),
+              ),
+            ),
+          ),
+        );
+
+        break;
+      }
+      default:
+        break;
+    }
+  }
+
+  // ROLE CONDITION
+
+  switch (role) {
+    case "admin":
+      break;
+
+    case "teacher":
+      lessonQuery = lessonQuery.where((assignment) =>
+        assignment.lesson.some((lesson) => lesson.teacherId.eq(currentUserId as string)),
+      );
+
+      lessonCountQuery = lessonCountQuery.where((assignment) =>
+        assignment.lesson.some((lesson) => lesson.teacherId.eq(currentUserId as string)),
+      );
+      break;
+
+    case "student":
+      lessonQuery = lessonQuery.where((assignment) =>
+        assignment.lesson.some((lesson) =>
+          lesson.class.some((classItem) =>
+            classItem.students.some((student) => student.id.eq(currentUserId as string)),
+          ),
+        ),
+      );
+
+      lessonCountQuery = lessonCountQuery.where((assignment) =>
+        assignment.lesson.some((lesson) =>
+          lesson.class.some((classItem) =>
+            classItem.students.some((student) => student.id.eq(currentUserId as string)),
+          ),
+        ),
+      );
+      break;
+
+    case "parent":
+      lessonQuery = lessonQuery.where((assignment) =>
+        assignment.lesson.some((lesson) =>
+          lesson.class.some((classItem) =>
+            classItem.students.some((student) => student.parentId.eq(currentUserId as string)),
+          ),
+        ),
+      );
+
+      lessonCountQuery = lessonCountQuery.where((assignment) =>
+        assignment.lesson.some((lesson) =>
+          lesson.class.some((classItem) =>
+            classItem.students.some((student) => student.parentId.eq(currentUserId as string)),
+          ),
+        ),
+      );
+      break;
+
+    default:
+      break;
+  }
+
+  // =========================
+  // GET LESSONS
+  // =========================
+
+  const data = await lessonQuery
+    .include("lesson", (lesson) => lesson.include("class").include("subject").include("teacher"))
+    .orderBy((lessonItem) => lessonItem.id.asc())
+    .offset(ITEM_PER_PAGE * (p - 1))
+    .limit(ITEM_PER_PAGE)
+    .all();
+  console.log(data);
+  // =========================
+  // COUNT
+  // =========================
+
+  const countResult = await lessonCountQuery.aggregate((agg) => ({
+    total: agg.count(),
+  }));
+
+  const count = countResult.total;
+
+  const renderRow = (item: Models.public_Exams) => (
     <tr
       key={item.id}
       className="border-b border-gray-200 even:bg-slate-50 text-sm hover:bg-lamaPurpleLight"
     >
-      <td className="flex items-center gap-4 p-4">{item.subject}</td>
-      <td>{item.class}</td>
-      <td className="hidden md:table-cell">{item.teacher}</td>
-      <td className="hidden md:table-cell">{item.date}</td>
+      <td className="flex items-center gap-4 p-4">{item.lesson?.subject.name}</td>
+      <td>{item.lesson?.class.name}</td>
+      <td className="hidden md:table-cell">{item.lesson?.teacher.name}</td>
+      <td className="hidden md:table-cell">
+        {new Intl.DateTimeFormat("en-US").format(item?.startTime)}
+      </td>
       <td>
         <div className="flex items-center gap-2">
-          {role === "admin" || role === "teacher" && (
+          {(role === "admin" || role === "teacher") && (
             <>
-              <FormModal table="exam" type="update" data={item} />
-              <FormModal table="exam" type="delete" id={item.id} />
+              <FormContainer table="exam" type="update" data={serialize(item)} />
+              <FormContainer table="exam" type="delete" id={item.id} />
             </>
           )}
         </div>
@@ -75,14 +237,16 @@ const ExamListPage = () => {
             <button className="w-8 h-8 flex items-center justify-center rounded-full bg-lamaYellow">
               <Image src="/sort.png" alt="" width={14} height={14} />
             </button>
-            {role === "admin" || role === "teacher" && <FormModal table="exam" type="create" />}
+            {(role === "admin" || role === "teacher") && (
+              <FormContainer table="exam" type="create" />
+            )}
           </div>
         </div>
       </div>
       {/* LIST */}
-      <Table columns={columns} renderRow={renderRow} data={examsData} />
+      <Table columns={getColumns(role)} renderRow={renderRow} data={data} />
       {/* PAGINATION */}
-      <Pagination />
+      <Pagination page={p} count={count} />
     </div>
   );
 };

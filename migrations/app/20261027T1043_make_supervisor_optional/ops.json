@@ -1,0 +1,45 @@
+[
+  {
+    "id": "alterNullability.dropNotNull.class.supervisorId",
+    "label": "Drop NOT NULL on \"class\".\"supervisorId\"",
+    "operationClass": "widening",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "column",
+        "name": "supervisorId",
+        "table": "class"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure column \"supervisorId\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"information_schema\".\"columns\" WHERE (\"table_schema\" = $1 AND \"table_name\" = $2 AND \"column_name\" = $3)) AS \"result\"",
+        "params": [
+          "public",
+          "class",
+          "supervisorId"
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "drop NOT NULL on \"supervisorId\"",
+        "sql": "ALTER TABLE \"public\".\"class\" ALTER COLUMN \"supervisorId\" DROP NOT NULL"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify column \"supervisorId\" is nullable",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"information_schema\".\"columns\" WHERE (\"table_schema\" = $1 AND \"table_name\" = $2 AND \"column_name\" = $3 AND \"is_nullable\" = $4)) AS \"result\"",
+        "params": [
+          "public",
+          "class",
+          "supervisorId",
+          "YES"
+        ]
+      }
+    ]
+  }
+]

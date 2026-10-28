@@ -1,0 +1,248 @@
+[
+  {
+    "id": "dropConstraint.subject.subject_studentId_fkey",
+    "label": "Drop constraint \"subject_studentId_fkey\" on \"subject\"",
+    "operationClass": "destructive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "foreignKey",
+        "name": "subject_studentId_fkey",
+        "table": "subject"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure constraint \"subject_studentId_fkey\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "subject_studentId_fkey",
+          "public",
+          "\"public\".\"subject\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "drop constraint \"subject_studentId_fkey\"",
+        "sql": "ALTER TABLE \"public\".\"subject\" DROP CONSTRAINT \"subject_studentId_fkey\""
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify constraint \"subject_studentId_fkey\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "subject_studentId_fkey",
+          "public",
+          "\"public\".\"subject\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "dropConstraint.subject.subject_teacherId_fkey",
+    "label": "Drop constraint \"subject_teacherId_fkey\" on \"subject\"",
+    "operationClass": "destructive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "foreignKey",
+        "name": "subject_teacherId_fkey",
+        "table": "subject"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure constraint \"subject_teacherId_fkey\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "subject_teacherId_fkey",
+          "public",
+          "\"public\".\"subject\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "drop constraint \"subject_teacherId_fkey\"",
+        "sql": "ALTER TABLE \"public\".\"subject\" DROP CONSTRAINT \"subject_teacherId_fkey\""
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify constraint \"subject_teacherId_fkey\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "subject_teacherId_fkey",
+          "public",
+          "\"public\".\"subject\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "dropIndex.subject.subject_studentId_idx_bf255322",
+    "label": "Drop index \"subject_studentId_idx_bf255322\"",
+    "operationClass": "destructive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "subject_studentId_idx_bf255322",
+        "table": "subject"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"subject_studentId_idx_bf255322\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"subject_studentId_idx_bf255322\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "drop index \"subject_studentId_idx_bf255322\"",
+        "sql": "DROP INDEX \"public\".\"subject_studentId_idx_bf255322\"",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"subject_studentId_idx_bf255322\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"subject_studentId_idx_bf255322\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "dropColumn.subject.studentId",
+    "label": "Drop column \"studentId\" from \"subject\"",
+    "operationClass": "destructive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "column",
+        "name": "studentId",
+        "table": "subject"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure column \"studentId\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"information_schema\".\"columns\" WHERE (\"table_schema\" = $1 AND \"table_name\" = $2 AND \"column_name\" = $3)) AS \"result\"",
+        "params": [
+          "public",
+          "subject",
+          "studentId"
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "drop column \"studentId\"",
+        "sql": "ALTER TABLE \"public\".\"subject\" DROP COLUMN \"studentId\""
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify column \"studentId\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"information_schema\".\"columns\" WHERE (\"table_schema\" = $1 AND \"table_name\" = $2 AND \"column_name\" = $3)) AS \"result\"",
+        "params": [
+          "public",
+          "subject",
+          "studentId"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "dropIndex.subject.subject_teacherId_idx_bc266660",
+    "label": "Drop index \"subject_teacherId_idx_bc266660\"",
+    "operationClass": "destructive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "subject_teacherId_idx_bc266660",
+        "table": "subject"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"subject_teacherId_idx_bc266660\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"subject_teacherId_idx_bc266660\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "drop index \"subject_teacherId_idx_bc266660\"",
+        "sql": "DROP INDEX \"public\".\"subject_teacherId_idx_bc266660\"",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"subject_teacherId_idx_bc266660\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"subject_teacherId_idx_bc266660\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "dropColumn.subject.teacherId",
+    "label": "Drop column \"teacherId\" from \"subject\"",
+    "operationClass": "destructive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "column",
+        "name": "teacherId",
+        "table": "subject"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure column \"teacherId\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"information_schema\".\"columns\" WHERE (\"table_schema\" = $1 AND \"table_name\" = $2 AND \"column_name\" = $3)) AS \"result\"",
+        "params": [
+          "public",
+          "subject",
+          "teacherId"
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "drop column \"teacherId\"",
+        "sql": "ALTER TABLE \"public\".\"subject\" DROP COLUMN \"teacherId\""
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify column \"teacherId\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"information_schema\".\"columns\" WHERE (\"table_schema\" = $1 AND \"table_name\" = $2 AND \"column_name\" = $3)) AS \"result\"",
+        "params": [
+          "public",
+          "subject",
+          "teacherId"
+        ]
+      }
+    ]
+  }
+]

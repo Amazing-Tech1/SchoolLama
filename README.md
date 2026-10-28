@@ -1,26 +1,115 @@
-# Lama Dev School Management Dashboard
+# SchoolLama
 
-## Getting Started
+SchoolLama is a role-based school management dashboard built with Next.js, React, TypeScript, PostgreSQL, and Prisma ORM. Clerk provides sign-in and role-based access; Cloudinary handles profile photo uploads.
 
-First, run the development server:
+## Features
+
+- Separate dashboards for administrators, teachers, students, and parents.
+- Management views for teachers, students, parents, classes, subjects, and lessons.
+- Exam, assignment, result, event, announcement, and attendance views.
+- Search, pagination, role-aware data filtering, and create/update forms where implemented.
+- Weekly schedules, event calendars, attendance summaries, and dashboard charts.
+
+## Requirements
+
+- Node.js 20.9 or newer.
+- pnpm.
+- PostgreSQL 15 or newer.
+- Clerk development application keys.
+- Cloudinary account and upload preset for profile photo uploads.
+
+## Setup
+
+1. Install dependencies:
+
+	```bash
+	pnpm install
+	```
+
+2. Create `.env` from the example:
+
+	```bash
+	cp .env.example .env
+	```
+
+	On PowerShell, use `Copy-Item .env.example .env`.
+
+3. Configure these values in `.env`:
+
+	```env
+	DATABASE_URL="postgresql://USER:PASSWORD@localhost:5432/DATABASE"
+	NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY="your-clerk-publishable-key"
+	CLERK_SECRET_KEY="your-clerk-secret-key"
+	NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME="your-cloud-name"
+	NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET="your-unsigned-upload-preset"
+	```
+
+	Keep real credentials out of source control. The Cloudinary upload preset must allow the client-side uploads used by the profile forms.
+
+4. Emit the Prisma contract, initialize a new database, and optionally load development data:
+
+	```bash
+	pnpm contract:emit
+	pnpm exec prisma db init
+	pnpm exec tsx src/prisma/seed.ts
+	```
+
+	**Warning:** the seed script deletes existing rows from the application tables before inserting its sample data. Run it only against a disposable development database. It seeds PostgreSQL records; it does not create Clerk sign-in accounts.
+
+5. Start the development server:
+
+	```bash
+	pnpm dev
+	```
+
+	Open [http://localhost:3000](http://localhost:3000).
+
+## Database
+
+The Prisma contract is in `src/prisma/contract.prisma`; generated contract artifacts are in `src/prisma/`. Prisma CLI configuration is in `prisma.config.ts`, and migration packages are in `migrations/`.
+
+After changing the contract, emit its generated artifacts:
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+pnpm contract:emit
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Check or apply the on-disk migration history for an existing database:
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```bash
+pnpm exec prisma migration status
+pnpm exec prisma db migrate
+```
 
-## Learn More
+Use `prisma db init` for a new database that needs its tables created from the current contract. Use migrations when evolving a database that already has migration history.
 
-To learn more about Next.js, take a look at the following resources:
+## Roles and Routes
 
-- [Lama Dev Youtube Channel](https://youtube.com/lamadev) 
-- [Next.js](https://nextjs.org/learn)
+Dashboard access is based on the Clerk user's `publicMetadata.role`. Supported roles are `admin`, `teacher`, `student`, and `parent`.
+
+| Route | Purpose |
+|---|---|
+| `/admin` | Administrative overview and charts |
+| `/teacher` | Teacher schedule and announcements |
+| `/student` | Student schedule and announcements |
+| `/parent` | Parent dashboard |
+| `/list/teachers` | Teacher directory |
+| `/list/students` | Student directory |
+| `/list/parents` | Parent directory |
+| `/list/classes` | Classes |
+| `/list/subjects` | Subjects |
+| `/list/lessons` | Lessons |
+| `/list/exams` | Exams |
+| `/list/assignments` | Assignments |
+| `/list/results` | Results |
+| `/list/events` | Events |
+| `/list/announcements` | Announcements |
+
+## Scripts
+
+| Command | Description |
+|---|---|
+| `pnpm dev` | Start the development server |
+| `pnpm build` | Create a production build |
+| `pnpm start` | Serve the production build |
+| `pnpm contract:emit` | Regenerate Prisma contract artifacts |
